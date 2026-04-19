@@ -6,32 +6,32 @@
 
 ## 1. Project Overview
 
-- [cite_start]**Dataset**: CIFAR-100 (50,000 Training / 10,000 Test images) [cite: 408]
-- [cite_start]**Constraint**: 'From Scratch' 학습 (사전 학습된 가중치 사용 금지), 외부 데이터 사용 금지, 단일 GPU 환경 [cite: 412]
-- [cite_start]**Metric**: Top-1 Accuracy & Super-Class Accuracy (Top-5 밀도 기준) [cite: 332, 333]
+- [cite_start]**Dataset**: CIFAR-100 (50,000 Training / 10,000 Test images)
+- [cite_start]**Constraint**: 'From Scratch' 학습 (사전 학습된 가중치 사용 금지), 외부 데이터 사용 금지, 단일 GPU 환경
+- [cite_start]**Metric**: Top-1 Accuracy & Super-Class Accuracy (Top-5 밀도 기준)
 
 ## 2. Model Architecture: WideResNet-28-12
 
-- [cite_start]**Structure**: 기존 WideResNet-28-10 대비 채널 수를 1.2배 확장하여 모델 용량(Capacity) 확보 [cite: 243, 244]
-- [cite_start]**Feature Extract**: 2-Head 구조를 채택하여 분류(Classification)와 임베딩(Embedding) 정보를 동시에 학습 [cite: 222]
-- [cite_start]**Regularization**: Dropout 0.4 및 가중치 감쇠(Weight Decay) 적용으로 과적합 방지 [cite: 243]
+- [cite_start]**Structure**: 기존 WideResNet-28-10 대비 채널 수를 1.2배 확장하여 모델 용량(Capacity) 확보
+- [cite_start]**Feature Extract**: 2-Head 구조를 채택하여 분류(Classification)와 임베딩(Embedding) 정보를 동시에 학습
+- [cite_start]**Regularization**: Dropout 0.4 및 가중치 감쇠(Weight Decay) 적용으로 과적합 방지
 
 ## 3. Key Strategies & Techniques
 
 ### 3.1 Hierarchical Loss Design
 
-- [cite_start]**Hierarchical Label Smoothing**: 세부 클래스 간의 관계를 고려하여 같은 슈퍼클래스 내 클래스들에 대해 부드러운 라벨링 적용 (LS 0.15) [cite: 393]
-- [cite_start]**Hybrid Loss Function**: 세부 클래스 분류를 위한 CE Loss와 슈퍼클래스 간 응집도를 높이는 SupCon(Embedding) Loss를 결합 ($Loss = \text{Hierarchical CE} + \beta \cdot L_{emb}$) [cite: 222]
+- [cite_start]**Hierarchical Label Smoothing**: 세부 클래스 간의 관계를 고려하여 같은 슈퍼클래스 내 클래스들에 대해 부드러운 라벨링 적용 (LS 0.15)
+- [cite_start]**Hybrid Loss Function**: 세부 클래스 분류를 위한 CE Loss와 슈퍼클래스 간 응집도를 높이는 SupCon(Embedding) Loss를 결합 ($Loss = \text{Hierarchical CE} + \beta \cdot L_{emb}$)
 
 ### 3.2 Optimization & Training
 
-- [cite_start]**SAM Optimizer**: 손실 함수의 기울기가 평탄한(Flat) 지점을 찾아 일반화 성능을 극대화하는 Sharpness-Aware Minimization 적용 [cite: 393]
-- [cite_start]**Training Schedule**: 300 Epoch 장기 학습 및 Cosine Annealing 스케줄러를 통한 정밀한 수렴 유도 [cite: 221, 241]
+- [cite_start]**SAM Optimizer**: 손실 함수의 기울기가 평탄한(Flat) 지점을 찾아 일반화 성능을 극대화하는 Sharpness-Aware Minimization 적용
+- [cite_start]**Training Schedule**: 300 Epoch 장기 학습 및 Cosine Annealing 스케줄러를 통한 정밀한 수렴 유도
 
 ### 3.3 Advanced Augmentation
 
-- [cite_start]**High-Intensity Mix-Aug**: CutMix와 Mixup을 100% 확률로 적용하여 모델의 강건성(Robustness) 확보 [cite: 236]
-- [cite_start]**Feature Preserving**: ColorJitter 등을 통해 물체의 형태는 보존하면서 질감과 색상 변화에 대한 대응력 강화 [cite: 397]
+- [cite_start]**High-Intensity Mix-Aug**: CutMix와 Mixup을 100% 확률로 적용하여 모델의 강건성(Robustness) 확보
+- [cite_start]**Feature Preserving**: ColorJitter 등을 통해 물체의 형태는 보존하면서 질감과 색상 변화에 대한 대응력 강화
 
 ## 4. Final Performance
 
@@ -42,7 +42,7 @@
 
 ## 5. File Structure
 
-- [cite_start]`dataloader.py`: CIFAR-100 데이터 로딩 및 계층적 맵 추출 [cite: 408]
-- [cite_start]`model(28_12).py`: WideResNet-28-12 아키텍처 및 SAM 구현 [cite: 241]
-- [cite_start]`trainer(28_12).py`: 학습 루프 및 계층적 손실 계산 로직 [cite: 417]
-- [cite_start]`run_all_wrn_28_12_2.ipynb`: 전체 실험 실행 및 결과 시각화 노트북 [cite: 254, 417]
+- [cite_start]`dataloader.py`: CIFAR-100 데이터 로딩 및 계층적 맵 추출
+- [cite_start]`model(28_12).py`: WideResNet-28-12 아키텍처 및 SAM 구현
+- [cite_start]`trainer(28_12).py`: 학습 루프 및 계층적 손실 계산 로직
+- [cite_start]`run_all_wrn_28_12_2.ipynb`: 전체 실험 실행 및 결과 시각화 노트북
