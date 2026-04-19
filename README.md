@@ -12,13 +12,13 @@
 
 - **Structure**: 기존 WideResNet-28-10 대비 채널 수를 1.2배 확장하여 모델 용량(Capacity) 확보
 - **Feature Extract**: 2-Head 구조를 채택하여 분류(Classification)와 임베딩(Embedding) 정보를 동시에 학습
-- **Regularization**: Dropout 0.4 및 가중치 감쇠(Weight Decay) 적용으로 과적합 방지
+- **Strategic Dropout Removal**: SAM 옵티마이저와 강력한 데이터 증강(Mix-Aug)의 정규화 효과를 신뢰하여 Dropout을 0.0으로 설정. 이를 통해 임베딩 공간의 응집도를 극대화함.
 
 ## 3. Key Strategies & Techniques
 
 ### 3.1 Hierarchical Loss Design
 
-- **Hierarchical Label Smoothing**: 세부 클래스 간의 관계를 고려하여 같은 슈퍼클래스 내 클래스들에 대해 부드러운 라벨링 적용 (LS 0.15)
+- **Hierarchical Label Smoothing**: 세부 클래스 간의 관계를 고려하여 같은 슈퍼클래스 내 클래스들에 대해 부드러운 라벨링 적용 (LS 0.15, Sibling Ratio 0.8)
 - **Hybrid Loss Function**: 세부 클래스 분류를 위한 CE Loss와 슈퍼클래스 간 응집도를 높이는 SupCon(Embedding) Loss를 결합 ($Loss = \text{Hierarchical CE} + \beta \cdot L_{emb}$)
 
 ### 3.2 Optimization & Training
