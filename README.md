@@ -1,4 +1,4 @@
-# CIFAR-100 Classification Challenge: Team DINOFORCE
+# CIFAR-100 Classification Challenge: Team DINOFORCE TV
 
 본 프로젝트는 CIFAR-100 데이터셋을 활용하여 세부 클래스(Fine-class) 및 슈퍼클래스(Super-class) 분류 성능을 최적화하는 모델을 개발하는 것을 목표로 합니다.
 
