@@ -154,11 +154,7 @@ run_experiment(_final_scratch_config, device)
 ├── run_all_wrn_28_12_2.ipynb # Experiment orchestration and config
 └── README.md                # Documentation
 
-
-
-
-
-
+---
 
 
 # CIFAR-100 Classification Challenge: Team DINOFORCE TV
