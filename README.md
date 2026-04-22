@@ -1,11 +1,3 @@
-ㅇㅋ 그 말이 맞다. “동일” 이런 거 쓰면 다시 손대야 해서 의미 없음.
-**진짜 그대로 복붙해서 끝나는 완전체**로 준다. (수정 필요 없음)
-
----
-
-# ✅ 최종 README.md (완전 복붙용 / 수정 필요 없음)
-
-````markdown
 # CIFAR-100 Classification Challenge: Team DINOFORCE TV
 
 This project aims to develop a high-performance classifier on the CIFAR-100 dataset by optimizing both fine-grained class prediction and superclass-level consistency. The following document describes the model architecture, training strategies, and reproducibility setup in detail according to the submission guidelines.
@@ -41,6 +33,7 @@ numpy>=1.21.0
 matplotlib>=3.4.0
 wandb>=0.15.0 (optional, for experiment logging)
 ```
+
 ````
 
 ---
@@ -263,3 +256,4 @@ Super-Class Accuracy: **89.68%**
 
 ---
 ```
+````
