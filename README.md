@@ -1,5 +1,168 @@
 # CIFAR-100 Classification Challenge: Team DINOFORCE TV
 
+This project aims to develop a high-performance classifier on the CIFAR-100 dataset by optimizing both fine-grained class prediction and superclass-level consistency. The following document describes the model architecture, training strategies, and reproducibility setup in detail according to the submission guidelines.
+
+---
+
+## 1. Project Overview
+
+- **Dataset**: CIFAR-100 (50,000 training / 10,000 test images)
+- **Constraint**:
+  - Training from scratch (no pretrained weights)
+  - No external data usage
+  - Single GPU environment
+
+- **Metric**:
+  - Top-1 Accuracy
+  - Super-Class (SC) Accuracy (based on Top-5 prediction density)
+
+- **Goal**:
+  - Reduce fine-grained confusion between similar classes
+  - Improve semantic consistency at the superclass level
+
+---
+
+## 2. Requirements (Dependencies)
+
+The following environment is required to run this project:
+
+```bash
+torch>=2.0.0
+torchvision>=0.15.0
+numpy>=1.21.0
+matplotlib>=3.4.0
+wandb>=0.15.0 (optional, for experiment logging)
+```
+
+---
+
+## 3. Model Architecture: WideResNet-28-12
+
+- **Backbone Capacity**
+  Compared to the standard WideResNet-28-10, we increased the widen factor to 12 (WRN-28-12), resulting in approximately 1.44× more parameters and enhanced representation power. This enables better discrimination of subtle visual differences.
+
+- **Strategic Dropout Removal**
+  Since strong data augmentation (Mixup/CutMix) and hierarchical loss already provide sufficient regularization, dropout was removed (set to 0.0) to avoid limiting model capacity.
+
+---
+
+## 4. Key Strategies & Techniques
+
+### 4.1 Hierarchical Loss Design
+
+- **Hierarchical Label Smoothing**
+  Instead of a one-hot target, we use a soft target distribution:
+  - 85% probability assigned to the ground-truth class
+  - The remaining 15% is distributed among sibling classes within the same superclass (80% of the residual mass)
+
+- **Hybrid Objective**
+  Based on the idea that “not all mistakes are equally wrong,” the model is trained to:
+  - Accurately classify fine classes
+  - Maintain consistency within superclass structures
+    This significantly improves SC Accuracy.
+
+---
+
+### 4.2 Optimization & Training
+
+- **SAM (Sharpness-Aware Minimization)**
+  SAM is applied to find flatter minima, improving generalization performance.
+
+- **Training Schedule**
+  - Batch Size: 256
+  - Initial Learning Rate: 0.2
+  - Epochs: 300
+  - Scheduler: Cosine Annealing
+
+This setup enables stable convergence and high final performance.
+
+---
+
+### 4.3 Advanced Augmentation
+
+- **High-Intensity Mix-Augmentation**
+  Mixup and CutMix are applied alternately with 100% probability per batch.
+  This significantly improves robustness and prevents overfitting.
+
+---
+
+## 5. Final Performance
+
+Results from three independent runs with different random seeds (300 epochs each):
+
+| Model / Seed         | Top-1 Accuracy | Super-Class (SC) Accuracy | Notes     |
+| -------------------- | -------------- | ------------------------- | --------- |
+| WRN-28-12 (Seed 42)  | 85.04%         | 89.46%                    | Confirmed |
+| WRN-28-12 (Seed 77)  | 85.37%         | 89.82%                    | Confirmed |
+| WRN-28-12 (Seed 100) | **85.73%**     | **89.76%**                | Best Run  |
+| **Final Mean**       | **85.38%**     | **89.68%**                |           |
+
+---
+
+## 6. How to Train & Evaluate
+
+The project is designed to run end-to-end within a Jupyter Notebook (`run_all_wrn_28_12_2.ipynb`).
+
+### Execution Steps
+
+1. Open the notebook in Google Colab or a local Jupyter environment.
+2. Run the initial cells to load required libraries and `.py` modules.
+3. Execute the main training cell (`run_experiment`).
+4. Training, validation, and evaluation will run automatically.
+
+- Metrics (Top-1 Acc, SC Acc) are logged every epoch
+- Logs are saved to `log_wrn28_12_scratch.json`
+- Best checkpoints are automatically saved in the `checkpoints/` directory
+
+---
+
+## 7. Random Seed Configuration
+
+To ensure full reproducibility, all random generators (`numpy`, `torch`, `cuda`) are controlled.
+
+- Official seeds used: **42, 77, 100**
+
+### Changing the Seed
+
+Modify the `seed` value in the configuration dictionary:
+
+```python
+_final_scratch_config = {
+    'run_id': 303,
+    'memo': 'SCRATCH: WRN-28-12, BS256, Drop 0.0, Hierarchical LS',
+    'seed': 77,  # Change this value
+
+    'depth': 28,
+    'widen_factor': 12,
+}
+```
+
+Then run:
+
+```python
+run_experiment(_final_scratch_config, device)
+```
+
+---
+
+## 8. File Structure
+
+````text
+├── dataloader.py             # CIFAR-100 loading, preprocessing, superclass mapping
+├── model(28_12).py          # WRN-28-12 architecture + SAM optimizer
+├── trainer(28_12).py        # Training loop, validation, hierarchical loss
+├── run_all_wrn_28_12_2.ipynb # Experiment orchestration and config
+└── README.md                # Documentation
+
+
+
+
+
+
+
+
+# CIFAR-100 Classification Challenge: Team DINOFORCE TV
+
 본 프로젝트는 CIFAR-100 데이터셋을 활용하여 세부 클래스(Fine-class) 및 슈퍼클래스(Super-class) 분류 성능을 최적화하는 모델을 개발하는 것을 목표로 합니다. 제출 가이드라인에 맞추어 모델 아키텍처, 학습 전략, 재현성 검증 방법 등을 상세히 기술합니다.
 
 ---
@@ -23,7 +186,7 @@ torchvision>=0.15.0
 numpy>=1.21.0
 matplotlib>=3.4.0
 wandb>=0.15.0 (선택: 실험 로깅용)
-```
+````
 
 ---
 
