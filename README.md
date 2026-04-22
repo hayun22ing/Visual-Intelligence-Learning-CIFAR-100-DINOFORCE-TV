@@ -90,12 +90,12 @@ This setup enables stable convergence and high final performance.
 
 Results from three independent runs with different random seeds (300 epochs each):
 
-| Model / Seed         | Top-1 Accuracy | Super-Class (SC) Accuracy | Notes     |
-| -------------------- | -------------- | ------------------------- | --------- |
-| WRN-28-12 (Seed 42)  | 85.04%         | 89.46%                    | Confirmed |
-| WRN-28-12 (Seed 77)  | 85.37%         | 89.82%                    | Confirmed |
-| WRN-28-12 (Seed 100) | **85.73%**     | **89.76%**                | Best Run  |
-| **Final Mean**       | **85.38%**     | **89.68%**                |           |
+| Model / Seed         | Top-1 Accuracy    | Super-Class (SC) Accuracy | Notes     |
+| -------------------- | ----------------- | ------------------------- | --------- |
+| WRN-28-12 (Seed 42)  | 85.04%            | 89.46%                    | Confirmed |
+| WRN-28-12 (Seed 77)  | 85.37%            | 89.82%                    | Confirmed |
+| WRN-28-12 (Seed 100) | **85.73%**        | **89.76%**                | Best Run  |
+| **Final Mean ± Std** | **85.38 ± 0.35%** | **89.68 ± 0.19%**         |           |
 
 ---
 
@@ -209,8 +209,12 @@ WideResNet-28-12를 사용하여 모델의 표현력을 확장하고, Dropout을
 
 ## 5. Final Performance
 
-Top-1 Accuracy: **85.38%**
-Super-Class Accuracy: **89.68%**
+| Model / Seed         | Top-1 Accuracy    | Super-Class (SC) Accuracy | Notes     |
+| -------------------- | ----------------- | ------------------------- | --------- |
+| WRN-28-12 (Seed 42)  | 85.04%            | 89.46%                    | Confirmed |
+| WRN-28-12 (Seed 77)  | 85.37%            | 89.82%                    | Confirmed |
+| WRN-28-12 (Seed 100) | **85.73%**        | **89.76%**                | Best Run  |
+| **Final Mean ± Std** | **85.38 ± 0.35%** | **89.68 ± 0.19%**         |           |
 
 ---
 
