@@ -34,8 +34,6 @@ matplotlib>=3.4.0
 wandb>=0.15.0 (optional, for experiment logging)
 ```
 
-````
-
 ---
 
 ## 3. Model Architecture: WideResNet-28-12
@@ -256,4 +254,3 @@ Super-Class Accuracy: **89.68%**
 
 ---
 ```
-````
