@@ -147,15 +147,15 @@ run_experiment(_final_scratch_config, device)
 
 ## 8. File Structure
 
-````text
+```text
 ├── dataloader.py             # CIFAR-100 loading, preprocessing, superclass mapping
 ├── model(28_12).py          # WRN-28-12 architecture + SAM optimizer
 ├── trainer(28_12).py        # Training loop, validation, hierarchical loss
 ├── run_all_wrn_28_12_2.ipynb # Experiment orchestration and config
 └── README.md                # Documentation
+```
 
 ---
-
 
 # CIFAR-100 Classification Challenge: Team DINOFORCE TV
 
@@ -182,7 +182,7 @@ torchvision>=0.15.0
 numpy>=1.21.0
 matplotlib>=3.4.0
 wandb>=0.15.0 (선택: 실험 로깅용)
-````
+```
 
 ---
 
