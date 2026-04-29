@@ -120,12 +120,12 @@ class CIFAR100WithCoarse(Dataset):
 def get_dataloaders(data_root='./data', aug='basic',
                     batch_size=64, num_workers=4):
     """
-    train(50k) / val(10k) DataLoader 반환
+    train(50k) / test(10k) DataLoader 반환
     - train: CIFAR-100 공식 train set 전체 (50,000장)
-    - val  : CIFAR-100 공식 test set 전체 (10,000장)
+    - test  : CIFAR-100 공식 test set 전체 (10,000장)
 
     Returns:
-        train_loader, val_loader, sc_map
+        train_loader, test_loader, sc_map
     """
     train_transform = get_transform(aug=aug,   mode='train')
     test_transform  = get_transform(aug='basic', mode='test')
@@ -133,7 +133,7 @@ def get_dataloaders(data_root='./data', aug='basic',
     # 다운로드 먼저 (build_superclass_map이 pickle 파일을 직접 읽으므로)
     train_base = datasets.CIFAR100(data_root, train=True,
                                    download=True, transform=train_transform)
-    val_base   = datasets.CIFAR100(data_root, train=False,
+    test_base   = datasets.CIFAR100(data_root, train=False,
                                    download=True, transform=test_transform)
 
     # SUPERCLASS_MAP 추출 (다운로드 완료 후)
@@ -141,15 +141,15 @@ def get_dataloaders(data_root='./data', aug='basic',
 
     # coarse label 래핑
     train_ds = CIFAR100WithCoarse(train_base, sc_map)
-    val_ds   = CIFAR100WithCoarse(val_base,   sc_map)
+    test_ds   = CIFAR100WithCoarse(test_base,   sc_map)
 
     train_loader = DataLoader(train_ds, batch_size=batch_size,
                               shuffle=True, num_workers=num_workers,
                               pin_memory=True, drop_last=True)
-    val_loader   = DataLoader(val_ds, batch_size=batch_size * 2,
+    test_loader   = DataLoader(test_ds, batch_size=batch_size * 2,
                               shuffle=False, num_workers=num_workers,
                               pin_memory=True)
 
-    print(f'[Data] Train {len(train_ds):,} / Val {len(val_ds):,} '
+    print(f'[Data] Train {len(train_ds):,} / Test {len(test_ds):,} '
           f'| aug={aug} | batch={batch_size}')
-    return train_loader, val_loader, sc_map
+    return train_loader, test_loader, sc_map

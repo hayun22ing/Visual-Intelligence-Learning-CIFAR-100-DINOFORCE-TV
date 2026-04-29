@@ -101,27 +101,36 @@ Results from three independent runs with different random seeds (300 epochs each
 
 ## 6. How to Train & Evaluate
 
+### Data Split Clarification
+
+- **Training**: 50,000 CIFAR-100 `train=True` images were strictly used for model updating.
+- **Evaluation**: The official 10,000 CIFAR-100 `train=False` test images were strictly isolated for evaluation only.
+
+### 6.1 Training
+
 The project is designed to run end-to-end within a Jupyter Notebook (`run_all_wrn_28_12_2.ipynb`).
 
-### Execution Steps
-
 1. Install the required dependencies:
-
    ```bash
    pip install -r requirements.txt
    ```
-
 2. Open the notebook in Google Colab or a local Jupyter environment.
-
 3. Run the initial cells to load required libraries and `.py` modules.
-
 4. Execute the main training cell (`run_experiment`).
-
 5. Training, validation, and evaluation will run automatically.
+   - Metrics (Top-1 Acc, SC Acc) are logged every epoch
+   - Logs are saved to `log_wrn28_12_scratch.json`
+   - Best checkpoints are automatically saved in the `checkpoints/` directory
 
-- Metrics (Top-1 Acc, SC Acc) are logged every epoch
-- Logs are saved to `log_wrn28_12_scratch.json`
-- Best checkpoints are automatically saved in the `checkpoints/` directory
+### 6.2 Evaluation (Testing the Best Checkpoint)
+
+To quickly evaluate the trained model on the 10,000 Test Set without running the Jupyter Notebook, use the standalone evaluation script.
+
+```bash
+python evaluate.py
+```
+
+This script will load the official 10,000 test images, load the best `.pth` checkpoint, and output the exact Top-1 and Super-Class Accuracy.
 
 ---
 
@@ -158,6 +167,7 @@ run_experiment(_final_scratch_config, device)
 
 ```text
 ├── dataloader.py             # CIFAR-100 loading, preprocessing, superclass mapping
+├── evaluate.py               # Standalone evaluation script for the 10k Test Set
 ├── model(28_12).py          # WRN-28-12 architecture + SAM optimizer
 ├── trainer(28_12).py        # Training loop, validation, hierarchical loss
 ├── run_all_wrn_28_12_2.ipynb # Experiment orchestration and config
@@ -220,21 +230,32 @@ WideResNet-28-12를 사용하여 모델의 표현력을 확장하고, Dropout을
 
 ## 6. How to Train & Evaluate
 
-### 실행 방법
+### 데이터셋 분할 명시 (Data Split Clarification)
+
+- **학습(Training)**: 50,000장의 CIFAR-100 `train=True` 데이터만 모델 학습(Gradient Update)에 사용되었습니다.
+- **평가(Evaluation)**: 10,000장의 공식 CIFAR-100 `train=False` 테스트 데이터는 학습에 일절 포함되지 않고 오직 최종 평가용으로만 엄격하게 분리되어 사용되었습니다.
+
+### 6.1 학습 방법 (Training)
 
 1. 필요한 라이브러리를 설치합니다:
-
    ```bash
    pip install -r requirements.txt
    ```
-
 2. Jupyter Notebook (`run_all_wrn_28_12_2.ipynb`)을 실행합니다.
-
 3. `run_experiment` 셀을 실행하면 학습 및 평가가 자동으로 진행됩니다.
+   - 매 Epoch마다 Top-1 Acc 및 SC Acc가 출력됩니다.
+   - 로그는 `log_wrn28_12_scratch.json`에 저장됩니다.
+   - 최고 성능 모델은 `checkpoints/` 폴더에 자동 저장됩니다.
 
-- 매 Epoch마다 Top-1 Acc 및 SC Acc가 출력됩니다.
-- 로그는 `log_wrn28_12_scratch.json`에 저장됩니다.
-- 최고 성능 모델은 `checkpoints/` 폴더에 자동 저장됩니다.
+### 6.2 평가 방법 (Evaluation)
+
+Jupyter Notebook 전체를 실행할 필요 없이, 학습된 최고 성능의 가중치(`.pth`)를 10,000장 테스트 셋에 대해 즉시 평가하려면 아래 스크립트를 실행하세요.
+
+```bash
+python evaluate.py
+```
+
+해당 스크립트는 10,000장의 공식 테스트 셋을 불러와 최고 성능 체크포인트를 기반으로 정확한 Top-1 및 Super-Class Accuracy를 출력합니다.
 
 ---
 
@@ -248,13 +269,9 @@ WideResNet-28-12를 사용하여 모델의 표현력을 확장하고, Dropout을
 
 ```text
 ├── dataloader.py                # CIFAR-100 데이터 로딩 및 전처리
+├── evaluate.py                  # 10,000장 Test Set 독립 평가 스크립트
 ├── model(28_12).py              # 모델 구조 및 SAM 구현
 ├── trainer(28_12).py            # 학습 루프 및 Loss 함수
 ├── run_all_wrn_28_12_2.ipynb    # 전체 실행 노트북
 └── README.md                    # 문서
-```
-
-```
-
----
 ```
