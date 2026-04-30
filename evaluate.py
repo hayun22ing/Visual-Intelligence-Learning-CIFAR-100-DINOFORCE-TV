@@ -1,4 +1,5 @@
 import os
+import argparse
 import torch
 import importlib
 from torchvision import datasets, transforms
@@ -8,7 +9,7 @@ from torch.utils.data import DataLoader
 dataloader = importlib.import_module("dataloader")
 model_module = importlib.import_module("model(28_12)")
 
-def evaluate_best_model(checkpoint_path='./checkpoints/dinoforce_final_best_seed100.pth'):
+def evaluate_best_model(checkpoint_path='./checkpoints/dinoforce_final_best_seed100.pth', data_root='./data'):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print(f"🚀 Evaluation Started on {device}...")
 
@@ -17,15 +18,15 @@ def evaluate_best_model(checkpoint_path='./checkpoints/dinoforce_final_best_seed
     test_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean, std)])
     
     # dataloader.py의 매핑 함수 활용
-    sc_map = dataloader.build_superclass_map('./data')
-    test_base = datasets.CIFAR100(root='./data', train=False, download=True, transform=test_transform)
+    sc_map = dataloader.build_superclass_map(data_root)
+    test_base = datasets.CIFAR100(root=data_root, train=False, download=True, transform=test_transform)
     test_ds = dataloader.CIFAR100WithCoarse(test_base, sc_map)
     test_loader = DataLoader(test_ds, batch_size=128, shuffle=False, num_workers=2)
 
     print(f"✅ CIFAR-100 Test Dataset Loaded: {len(test_ds)} images")
 
     # 2. Model Load
-    model = model_module.WideResNet(depth=28, widen_factor=12, dropRate=0.0).to(device)
+    model = model_module.WideResNet(depth=28, widen_factor=12, dropout=0.0).to(device)
     
     if not os.path.exists(checkpoint_path):
         raise FileNotFoundError(f"Checkpoint not found at {checkpoint_path}. Please check the path.")
@@ -62,5 +63,8 @@ def evaluate_best_model(checkpoint_path='./checkpoints/dinoforce_final_best_seed
     print("="*50)
 
 if __name__ == '__main__':
-    # 평가할 가중치 경로 지정
-    evaluate_best_model()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--checkpoint', type=str, default='./checkpoints/dinoforce_final_best_seed100.pth')
+    parser.add_argument('--data_root', type=str, default='./data')
+    args = parser.parse_args()
+    evaluate_best_model(checkpoint_path=args.checkpoint, data_root=args.data_root)
