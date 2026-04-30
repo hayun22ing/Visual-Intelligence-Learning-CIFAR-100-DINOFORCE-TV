@@ -252,7 +252,7 @@ WideResNet-28-12를 사용하여 모델의 표현력을 확장하고, Dropout을
 Jupyter Notebook 전체를 실행할 필요 없이, 학습된 최고 성능의 가중치(`.pth`)를 10,000장 테스트 셋에 대해 즉시 평가하려면 아래 스크립트를 실행하세요.
 
 ```bash
-python evaluate.py
+python3 evaluate.py --checkpoint checkpoints_wrn28_12_scratch/{your best_pth file} --data_root ./data
 ```
 
 해당 스크립트는 10,000장의 공식 테스트 셋을 불러와 최고 성능 체크포인트를 기반으로 정확한 Top-1 및 Super-Class Accuracy를 출력합니다.
